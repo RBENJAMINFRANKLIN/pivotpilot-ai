@@ -8,6 +8,23 @@ This repository is a **local prototype**: everything runs on your computer with 
 and no external services. Production pieces (hosted login, cloud storage, live course search, Docker,
 hosting) have clearly marked placeholders; see [docs/FUTURE.md](docs/FUTURE.md).
 
+## Demo
+
+**[▶ Watch the 90-second walkthrough (MP4)](docs/media/pivotpilot-demo.mp4)**: recorded from the app running
+locally in demo mode. It shows the dashboard, fit analysis, learning plan, resources, a checkpoint quiz,
+dictated commands with confirmation, application tracking and a mock interview.
+
+[![PivotPilot AI dashboard](docs/media/1-dashboard.png)](docs/media/pivotpilot-demo.mp4)
+
+| Fit analysis | Adaptive quiz |
+|---|---|
+| ![Fit analysis: each requirement next to its resume evidence](docs/media/2-analysis.png) | ![Adaptive quiz with colour and shape answer tiles](docs/media/5-quiz.png) |
+| **Learning plan** | **Dictated command, awaiting confirmation** |
+| ![Week-by-week learning plan within the weekly hour limit](docs/media/3-plan.png) | ![Dictated command interpreted and shown for confirmation](docs/media/6-dictation.png) |
+
+All data in the demo is fictional (a mathematics teacher moving into data analysis). Open it yourself with
+**Open demo** on the start page.
+
 ## Run it locally
 
 You need **Python 3.11+** and **Node.js 20+**.
@@ -97,7 +114,7 @@ backend/   FastAPI + SQLAlchemy + Alembic (Python)
   tests/           pytest suite
 frontend/  React + TypeScript + Vite + Tailwind + TanStack Query + React Hook Form + Zod + Recharts
   e2e/             Playwright journey tests
-docs/      architecture, scoring, API, security, deployment, future work
+docs/      architecture, scoring, API, security, deployment, future work; docs/media = demo video and screenshots
 scripts/   setup and run scripts (Windows + macOS/Linux)
 ```
 
