@@ -35,3 +35,6 @@ ignore = ["E501", "B008"]
 testpaths = ["tests"]
 pythonpath = ["."]
 addopts = "-p no:logging"
+
+[tool.ruff.lint.isort]
+known-third-party = ["alembic"]
