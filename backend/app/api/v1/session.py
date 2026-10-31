@@ -9,7 +9,7 @@ from app.db import as_utc, utcnow
 from app.deps import AUTH_COOKIE, DB, GUEST_COOKIE, Ctx, CtxDep, OptionalCtxDep, ensure_user_workspace, resolve_guest
 from app.errors import api_error
 from app.models import User
-from app.security.crypto import hash_password, issue_local_token, ip_hash, verify_password
+from app.security.crypto import hash_password, ip_hash, issue_local_token, verify_password
 from app.security.ratelimit import client_ip, enforce
 from app.services.audit import audit
 from app.services.workspaces import create_guest_workspace, delete_workspace_data, migrate_guest_into_user
