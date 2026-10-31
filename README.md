@@ -10,7 +10,9 @@ hosting) have clearly marked placeholders; see [docs/FUTURE.md](docs/FUTURE.md).
 
 ## Demo
 
-**[▶ Watch the 90-second walkthrough (MP4)](docs/media/pivotpilot-demo.mp4)**: recorded from the app running
+https://github.com/user-attachments/assets/295aec3a-f390-4304-b158-935bac4202fa
+
+**90-second walkthrough**: recorded from the app running
 locally in demo mode. It shows the dashboard, fit analysis, learning plan, resources, a checkpoint quiz,
 dictated commands with confirmation, application tracking and a mock interview.
 
