@@ -208,8 +208,10 @@ def skill_gaps(db: Session, t: CareerTransition) -> dict:
                           assessed_status=(a.confidence if a else "not_assessed"),
                           prerequisites=r.prerequisite_skill_ids))
     items.sort(key=lambda i: (-IMPORTANCE_WEIGHT[i["importance"]] * i["gap"], i["name"]))
-    return {"status": "provisional" if any_provisional else "assessed", "items": items,
-            "note": "Gaps marked provisional are based on your resume and self-ratings until you complete the assessment."}
+    n_assessed = sum(1 for i in items if i["basis"] == "assessed")
+    status = "assessed" if not any_provisional else "partly_assessed" if n_assessed else "provisional"
+    return {"status": status, "items": items, "assessed_count": n_assessed,
+            "note": "Gaps marked provisional are based on your resume and self-ratings, not on an assessment."}
 
 
 def readiness(db: Session, t: CareerTransition) -> dict:

@@ -117,14 +117,14 @@ CERT = re.compile(r"\b(certification|certified|certificate)\b", re.I)
 def _unit_sections(text: str) -> list[tuple[str, str]]:
     out, section = [], "unknown"
     for unit in split_units(text):
-        short = len(unit) < 60
+        short = len(unit) < 60 and not find_skills(unit)  # a heading names a section, not a skill
         if short and PREFERRED_HEAD.search(unit):
             section = "preferred"
             continue
         if short and RESP_HEAD.search(unit):
             section = "responsibilities"
             continue
-        if short and MANDATORY_HEAD.search(unit) and not find_skills(unit):
+        if short and MANDATORY_HEAD.search(unit):
             section = "requirements"
             continue
         out.append((section, unit))
@@ -147,8 +147,15 @@ def analyze_rules(text: str) -> CompetencyMap:
         for skill_id in find_skills(unit):
             sk = SKILL_BY_ID[skill_id]
             prev = reqs.get(skill_id)
-            if prev and (prev.importance == "mandatory" or importance == "preferred"):
-                continue
+            if prev:
+                # Explicit statements (requirement/preferred sections, 0.65+) beat inferences from
+                # responsibilities or unlabelled text; between equals, mandatory wins.
+                prev_explicit, explicit = prev.confidence >= 0.65, conf >= 0.65
+                if prev_explicit != explicit:
+                    if prev_explicit:
+                        continue
+                elif prev.importance == "mandatory" or importance == "preferred":
+                    continue
             reqs[skill_id] = Requirement(label=sk["name"], category=CATEGORY_FOR[sk["category"]], importance=importance,
                                          skill_id=skill_id, source_excerpt=unit[:400], confidence=conf,
                                          prerequisite_skill_ids=prerequisites(skill_id))
