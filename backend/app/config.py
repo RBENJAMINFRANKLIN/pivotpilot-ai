@@ -83,6 +83,7 @@ class Settings(BaseSettings):
     rate_limit_guest_create_per_hour: int = 20
 
     demo_mode_enabled: bool = True
+    frontend_dist: str = ""  # defaults to ../frontend/dist when it exists
 
     @field_validator("database_url")
     @classmethod

@@ -31,6 +31,14 @@ Then open **http://localhost:5173** and choose **Start as a guest**, **Sign in**
 
 API docs (OpenAPI): http://localhost:8000/api/docs
 
+**Single-server mode**: after `cd frontend && npm run build`, the backend also serves the web app, so
+`uvicorn app.main:app --port 8000` alone gives you everything at http://localhost:8000.
+
+**Public demo link (Render, free)**: push this repo to GitHub, then in Render choose
+*New + → Blueprint*, pick the repository and click *Apply*. `render.yaml` builds the web app and serves it
+from the API at `https://pivotpilot-ai.onrender.com` (the name may differ). The free plan sleeps when idle and
+the demo database resets on restart.
+
 <details><summary>Manual steps (if you prefer)</summary>
 
 ```bash

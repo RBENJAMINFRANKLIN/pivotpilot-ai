@@ -1,0 +1,27 @@
+# Render Blueprint: one free web service that builds the React app and serves it from FastAPI.
+# In Render: New + -> Blueprint -> pick this repository -> Apply.
+# Note: the free plan has no persistent disk, so the SQLite demo database resets when the service
+# restarts or sleeps. For lasting data, set DATABASE_URL to a Supabase/Render PostgreSQL URL.
+services:
+  - type: web
+    name: pivotpilot-ai
+    runtime: python
+    plan: free
+    buildCommand: cd frontend && npm ci && npm run build && cd ../backend && pip install -r requirements.txt
+    startCommand: cd backend && python -m app.cli init && uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health/ready
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.13.1
+      - key: ENVIRONMENT
+        value: production
+      - key: APP_SECRET
+        generateValue: true
+      - key: COOKIE_SECURE
+        value: "true"
+      - key: DATABASE_URL
+        value: sqlite:///./pivotpilot.db
+      - key: CORS_ORIGINS
+        value: https://pivotpilot-ai.onrender.com
+      - key: AI_PROVIDER
+        value: rules

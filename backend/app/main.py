@@ -1,9 +1,11 @@
 import logging
+from pathlib import Path
 
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import FileResponse, JSONResponse
+from fastapi.staticfiles import StaticFiles
 from sqlalchemy import text
 
 from app.ai.llm import AIUnavailable
@@ -90,7 +92,27 @@ def create_app() -> FastAPI:
             return JSONResponse({"status": "unavailable", "database": "error"}, status_code=503)
 
     app.include_router(v1_router, prefix="/api/v1")
+    _serve_frontend(app)
     return app
+
+
+def _serve_frontend(app: FastAPI) -> None:
+    """Single-server mode: when the React app has been built (frontend/dist), serve it from
+    this process so one URL hosts everything and the session cookie stays first-party."""
+    dist = Path(get_settings().frontend_dist or Path(__file__).resolve().parents[2] / "frontend" / "dist")
+    index = dist / "index.html"
+    if not index.is_file():
+        return
+    app.mount("/assets", StaticFiles(directory=dist / "assets"), name="assets")
+
+    @app.get("/{path:path}", include_in_schema=False)
+    def spa(path: str):
+        if path.startswith("api/"):
+            return JSONResponse({"detail": {"code": "NOT_FOUND", "message": "Not found."}}, status_code=404)
+        f = (dist / path).resolve()
+        if path and dist in f.parents and f.is_file():
+            return FileResponse(f)
+        return FileResponse(index, headers={"Cache-Control": "no-cache"})
 
 
 app = create_app()
